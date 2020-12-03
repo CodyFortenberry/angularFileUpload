@@ -1,2 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/purple-green.css';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: sans-serif, "Helvetica Neue" ; overflow: hidden; }
+
+.mat-drawer-backdrop{
+    top:64px !important;
+    height: calc(100% - 64px) !important;
+}
+
+.mat-sidenav-container {
+    z-index: 4 !important;
+}
+
+.breadcrumbs {
+    margin-left: 40px;
+    margin-top: 20px;
+    position: fixed;
+}
+.app-container {
+    // height: calc(100% - 64px) !important;
+    // width: 100%;
+    // position: absolute;
+    // top:64px;
+    // left:0;
+    // z-index: 1;
+    margin-top: 20px;
+    padding:40px
+}
+
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+  }

@@ -1,0 +1,62 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="navigation"
+      [mode]="over"
+      [opened]="false">
+    <mat-toolbar class="user-info">
+      <mat-icon class="side-nav-icon" aria-label="icon">face</mat-icon>
+      <span class="side-nav-name">Jane Smith</span>
+      <span class="side-nav-email">jane.smith@example.com</span>
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+    <mat-nav-list class="side-nav-nav">
+      <mat-list-item>
+        <mat-icon class="side-nav-icon" aria-label="icon">folder</mat-icon>
+        <a mat-list-item href="#">My Files</a>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="side-nav-icon" aria-label="icon">folder_shared</mat-icon>
+        <a mat-list-item href="#">Files I'm Sharing</a>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="side-nav-icon" aria-label="icon">folder_special</mat-icon>
+        <a mat-list-item href="#">Files Shared With Me</a>
+      </mat-list-item>
+    </mat-nav-list>
+    <span class="fill-remaining-space"></span>
+    <mat-nav-list class="side-nav-actions">
+      <mat-list-item>
+        <mat-icon class="side-nav-icon" aria-label="icon">upgrade</mat-icon>
+        <a mat-list-item href="#">Upload File</a>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="side-nav-icon" aria-label="icon">exit_to_app</mat-icon>
+        <a mat-list-item href="#">Logout</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Welcome Jane Smith</span>
+      <span class="fill-remaining-space"></span>
+      <button
+        type="button"
+        mat-icon-button>
+        <mat-icon aria-label="search icon">search</mat-icon>
+      </button>
+      <button
+        type="button"
+        mat-icon-button>
+        <mat-icon aria-label="logout icon">exit_to_app</mat-icon>
+      </button>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>
