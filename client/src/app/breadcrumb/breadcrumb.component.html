@@ -1,1 +1,6 @@
-<div class="mat-card-subtitle"><span>My Files</span> | <span>My Folder</span> | <span>My Subfolder</span></div>
+<div class="mat-card-subtitle breadcrumbs">
+    <div *ngFor="let breadcrumb of breadcrumbs;">
+        <span *ngIf="!breadcrumb.isFirst" class="seperator">|</span>
+        <a (click)="updateDirectory(breadcrumb.directory)"><span>{{breadcrumb.name}}</span></a>
+    </div>
+</div>

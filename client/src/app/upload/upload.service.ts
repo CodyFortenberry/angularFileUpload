@@ -9,7 +9,7 @@ import { Subject, Observable } from 'rxjs';
 import { FileFolder } from '../shared/models/fileFolder.model';
 import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
 
-const url = 'http://localhost:3000/upload';
+const baseUrl = 'http://localhost:3000/';
 
 @Injectable()
 export class UploadService {
@@ -30,21 +30,43 @@ export class UploadService {
   getFileFoldersById(id) {
     let fileFoldersString = localStorage.getItem('fileFolders');
     let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
-    if (id && fileFolders.length > id) {
-        return fileFolders[id];
+    for (var i=0; i< fileFolders.length; i++) {
+      if (fileFolders[i].id === id) {
+        return fileFolders[i];
+      }
     }
     return null;
+  }
+
+  public deleteFileFolder(id) {
+    let fileFoldersString = localStorage.getItem('fileFolders');
+    let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
+    let index = -1;
+    for (var i=0; i< fileFolders.length; i++) {
+      if (fileFolders[i].id === id) {
+        index = i;
+      }
+    }
+    if (index != -1) {
+      fileFolders.splice(index,1);
+    }
+    localStorage.setItem("fileFolders",JSON.stringify(fileFolders));
   }
 
   public addFile(file,name,path,userId,isFolder) {
     let fileFoldersString = localStorage.getItem('fileFolders');
     let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
-    let fileFolderId = fileFolders.length;
+    let fileFolderId = this.getLargestId(fileFolders) + 1;
     let fileExt = null;
+    console.log(file);
     if (file) {
       fileExt = this.getFileExt(file.name);
     }
     let parentId = null;
+    if (path !== "") {
+      let pathArray = path.split("/");
+      parentId = parseInt(pathArray[pathArray.length - 1]);
+    }
     let sharedUserId = null;
     let fileFolder = new FileFolder(fileFolderId,parentId,name,fileExt,path,userId,sharedUserId,isFolder);
     fileFolders.push(fileFolder);
@@ -52,6 +74,16 @@ export class UploadService {
     localStorage.setItem("fileFolders",JSON.stringify(fileFolders));
     localStorage.setItem("isLoggedIn","true");
     return fileFolder;
+  }
+
+  getLargestId(fileFolders) {
+    let largestId = 0;
+    for (var i=0; i< fileFolders.length; i++) {
+      if (fileFolders[i].id > largestId) {
+        largestId = fileFolders[i].id;
+      }
+    }
+    return largestId;
   }
 
   getFileListForUser(userId,parentId) {
@@ -64,7 +96,9 @@ export class UploadService {
   }
 
   getFileExt(fileName) {
+    console.log(fileName);
     if (fileName.indexOf(".") !== -1) {
+      console.log(fileName.split("."));
       return fileName.split(".")[1];
     }
     return null;
@@ -109,14 +143,14 @@ export class UploadService {
     if (isFolder) {
       let fileFolder: FileFolder = this.addFile(null,name,path,userId,isFolder);
       formData.append('id', '' + fileFolder.id);
-      const req = new HttpRequest('POST', url, formData, {});
+      const req = new HttpRequest('POST', baseUrl + "upload", formData, {});
       this.http.request(req);
     }
     files.forEach(file => {
-      let fileFolder: FileFolder = this.addFile(null,name,path,userId,isFolder);
+      let fileFolder: FileFolder = this.addFile(file,name,path,userId,isFolder);
       formData.append('id', '' + fileFolder.id);
       formData.append('file', file, file.name);
-      const req = new HttpRequest('POST', url, formData, {
+      const req = new HttpRequest('POST', baseUrl + "upload", formData, {
         reportProgress: true
       });
 
@@ -151,8 +185,15 @@ export class UploadService {
     return status;
   }
 
-  public getFile(userId,directory) {
-
+  public downloadFile(userId,fileId,name,ext) {
+    const url = baseUrl + "download/" + fileId + "?userId=" + userId+ "&name=" + name + "&ext=" + ext;
+    window.location.href=url;
+    //this.http.get(url);
+    // this.http.get(url).subscribe((res: any) => { // not callback
+    //   console.log(res)
+    // }, error => {
+    //   console.error("Error", error);
+    // });
   }
 
 

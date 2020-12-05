@@ -13,14 +13,13 @@ export class FileFolderComponent {
   constructor(public uploadService: UploadService, public auth: AuthService) { }
 
   openFolder(id) {
-    console.log(id);
-    console.log(this.uploadService.getCurrentDirectory());
-    this.uploadService.setCurrentDirectory(this.uploadService.getCurrentDirectory() + "," + id);
-    console.log(this.uploadService.getCurrentDirectory());
+    this.uploadService.setCurrentDirectory(this.uploadService.getCurrentDirectory() + "/" + id);
   }
 
-  viewFile(id) {
-    
+  downloadFile(id) {
+    console.log("here");
+    let file = this.uploadService.getFileFoldersById(id);
+    this.uploadService.downloadFile(file.userId,file.id,file.name,file.ext);
   }
 
   shareFileFolder(id) {
@@ -28,14 +27,19 @@ export class FileFolderComponent {
   }
 
   deleteFileFolder(id) {
-
+    this.uploadService.deleteFileFolder(id);
   }
 
 
   get fileFolders() {
     let user = this.auth.getCurrentUser();
-    let currentDirectory = null;
-    let fileFolders: FileFolder[] = this.uploadService.getFileListForUser(user.id,currentDirectory);
+    let currentDirectory = this.uploadService.getCurrentDirectory();
+    let parentId = null;
+    if (currentDirectory !== "") {
+      let directoryArray = currentDirectory.split("/");
+      parentId = directoryArray[directoryArray.length - 1];
+    }
+    let fileFolders: FileFolder[] = this.uploadService.getFileListForUser(user.id,parentId);
     return fileFolders;
   }
 

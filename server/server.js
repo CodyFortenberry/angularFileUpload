@@ -19,10 +19,10 @@ server.post('/upload', upload.single('file'), (req, res) => {
   let file = req.file;
   let userId = req.body.userId;
   let id = req.body.id;
-  let path = req.body.path;
+  //let path = req.body.path;
   let isFolder = req.body.isFolder === "true";
   let userDirectory = uploadBase + userId;
-  let uploadPath = uploadBase + userId + "/" + path + id;
+  let uploadPath = userDirectory + "/" + id;
   
   if (!fs.existsSync(userDirectory)) {
     fs.mkdir(userDirectory, (err) => {
@@ -50,17 +50,14 @@ function saveFile(isFolder,file,uploadPath) {
   }
 }
 
-server.get('/file', (req, res) => {
-  //getFilePath from query string
-  //get name with ext form file path
-  //return file
-});
-
-server.get('/fileList', (req, res) => {
-  //directory from query string
-  //get name with ext form file path
-  //return file
-});
+server.get('/download/:id',(req,res)=>{  
+  let fileId = req.params.id;
+  let userId = req.query.userId;
+  let name = req.query.name;
+  let ext = req.query.ext;
+  let path = uploadBase + userId + "/" + fileId;
+  res.download(path,name + "." + ext); 
+})  
 
 
 

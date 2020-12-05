@@ -66,11 +66,10 @@ export class DialogComponent implements OnInit {
 
     // start the upload and save the progress map
 
-    let path = '';
+    let path = this.uploadService.getCurrentDirectory();
     let user = this.auth.getCurrentUser();
 
     this.progress = this.uploadService.upload(this.files,this.name,this.isFolder,path,user.id);
-    console.log(this.progress);
     for (const key in this.progress) {
       this.progress[key].progress.subscribe(val => console.log(val));
     }

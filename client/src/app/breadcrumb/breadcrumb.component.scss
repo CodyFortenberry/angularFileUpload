@@ -1,3 +1,11 @@
 .breadcrumbs {
-    font-size: 10px;
+    display: flex;
+    
+    .seperator {
+        margin: 0 10px;
+    }
+
+    a {
+        cursor: pointer;
+    }
 }
