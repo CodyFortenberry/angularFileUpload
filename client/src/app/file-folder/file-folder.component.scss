@@ -1,8 +1,18 @@
 .file-folder-card {
     width: 250px;
     height: 100px;
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .file-folder-icon {
     font-size: 55px;
+}
+
+.file-folder-container {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
 }

@@ -5,8 +5,8 @@
       [opened]="false">
     <mat-toolbar class="user-info">
       <mat-icon class="side-nav-icon" aria-label="icon">face</mat-icon>
-      <span class="side-nav-name">Jane Smith</span>
-      <span class="side-nav-email">jane.smith@example.com</span>
+      <span class="side-nav-name">{{currentUser.name}}</span>
+      <span class="side-nav-email">{{currentUser.email}}</span>
     </mat-toolbar>
     <mat-divider></mat-divider>
     <mat-nav-list class="side-nav-nav">
@@ -29,7 +29,7 @@
         <mat-icon class="side-nav-icon" aria-label="icon">upgrade</mat-icon>
         <a mat-list-item href="#">Upload File</a>
       </mat-list-item>
-      <mat-list-item>
+      <mat-list-item (click)="logout()" >
         <mat-icon class="side-nav-icon" aria-label="icon">exit_to_app</mat-icon>
         <a mat-list-item href="#">Logout</a>
       </mat-list-item>
@@ -44,7 +44,7 @@
         (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Welcome Jane Smith</span>
+      <span>Welcome {{currentUser.name}}</span>
       <span class="fill-remaining-space"></span>
       <button
         type="button"
@@ -53,6 +53,7 @@
       </button>
       <button
         type="button"
+        (click)="logout()" 
         mat-icon-button>
         <mat-icon aria-label="logout icon">exit_to_app</mat-icon>
       </button>

@@ -1,13 +1,17 @@
-<mat-card class="file-folder-card">
-  <mat-card-header>
-    <mat-card-title>Folder Name</mat-card-title>
-    <mat-card-subtitle>2 Folders, 4 files</mat-card-subtitle>
-    <span class="fill-remaining-space"></span>
-    <mat-icon color="primary" class="file-folder-icon" inline="true" aria-label="icon">folder</mat-icon>
-  </mat-card-header>
-  <mat-card-actions >
-    <button color="primary" mat-button>OPEN</button>
-    <button color="primary" mat-button>SHARE</button>
-    <button color="primary" mat-button>DELETE</button>
-  </mat-card-actions>
-</mat-card>
+<div class="file-folder-container">
+  <mat-card *ngFor="let fileFolder of fileFolders;" class="file-folder-card">
+    <mat-card-header>
+      <mat-card-title>{{fileFolder.name}}</mat-card-title>
+      <mat-card-subtitle>2 Folders, 4 files</mat-card-subtitle>
+      <span class="fill-remaining-space"></span>
+      <mat-icon *ngIf="fileFolder.isFolder" color="primary" class="file-folder-icon" inline="true" aria-label="icon">folder</mat-icon>
+      <mat-icon *ngIf="!fileFolder.isFolder" color="primary" class="file-folder-icon" inline="true" aria-label="icon">article</mat-icon>
+    </mat-card-header>
+    <mat-card-actions >
+    <button class="mat-button mat-primary" *ngIf="fileFolder.isFolder" (click)="openFolder(fileFolder.id)">OPEN</button>
+      <button class="mat-button mat-primary" *ngIf="!fileFolder.isFolder" color="primary">VIEW</button>
+      <button class="mat-button mat-primary">SHARE</button>
+      <button class="mat-button mat-primary">DELETE</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

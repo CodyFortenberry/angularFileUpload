@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Router} from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -10,11 +9,15 @@ import { map } from 'rxjs/operators';
 })
 export class NavMenuComponent {
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches)
-    );
+  constructor(private router: Router, private auth: AuthService) { }
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  logout() {
+    this.auth.logout();
+    this.router.navigate(["login"]);
+  }
+
+  get currentUser() {
+    return this.auth.getCurrentUser();
+  }
 
 }

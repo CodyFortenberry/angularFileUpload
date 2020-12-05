@@ -1,0 +1,28 @@
+.login-container {
+    height:100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 300px;
+}
+
+.login-full-width {
+    width:100%;
+}
+
+.login-header-text {
+    margin-left: -16px;
+}
+
+.login-table td {
+    padding: 5px 20px;
+}
+
+.login-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,23 +1,16 @@
-![image](https://raw.githubusercontent.com/LukasMarx/angular-file-upload/master/angular-file-upload-component.png)
-# Creating a File Upload Component in Angular
+# Application For Storing and Sharing Files
 ## Angular version: 8.0.0
 
-Creating file-upload components can be quite hard. 
+The project consist of two main folders: client and server
 
-Not only because you need to deal with files in JavaScript. Also, because you need an API to test against before you can actually start coding.
+For the Server:
+- cd server
+- npm install
+- npm run serve
 
-In this tutorial, we will learn how to do both. 
+For the Client
+- cd client
+- npm install
+- npm run serve
 
-First, we will create a simple express server with just one route to accept file uploads.
-
-Afterward, we will create an angular application from scratch and build a beautiful file-upload component using the angular material ui-component-library.
-
-Here is what the final result will look like:
-
-![image](https://raw.githubusercontent.com/LukasMarx/angular-file-upload/master/angular-file-upload-result.png)
-
-Ready?
-
-Let's start coding! 
-
-[Read the full article at malcoded.com!](https://malcoded.com/posts/angular-file-upload-component-with-express)
+Thats it!

@@ -1,0 +1,45 @@
+<div class="register-container background-primary">
+  <mat-card class="register-card">
+    <mat-card-header >
+      <mat-card-title class="register-header-text">Sign Up</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="register-form">
+        <table class="register-full-width register-table" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field appearance="outline" class="register-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="name" name="name">
+                <mat-hint>Your Name</mat-hint>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field appearance="outline" class="register-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput [(ngModel)]="email" name="email">
+                <mat-hint>Your Email Address</mat-hint>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field appearance="outline" class="register-full-width">
+                <mat-label>Password</mat-label>
+                <input matInput [(ngModel)]="password" name="password" type="password">
+                <mat-hint>Password must contain a digit and a symbol</mat-hint>
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+    </mat-card-content>
+    <mat-card-actions class="register-action-buttons">
+      <button color="primary" (click)="register()" mat-button>FINISH</button>
+      <button color="primary" [routerLink]="['/login']" mat-button>CANCEL</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

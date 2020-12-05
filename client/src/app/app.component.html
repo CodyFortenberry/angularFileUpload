@@ -1,16 +1,13 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<app-nav-menu></app-nav-menu>
-<app-breadcrumb class="breadcrumbs"></app-breadcrumb>
-<div class="app-container">
-    <router-outlet></router-outlet>
-</div>
-<div class="fab-buttons">
-    <button mat-fab >
-        <mat-icon class="side-nav-icon" aria-label="icon">create_new_folder</mat-icon>
-    </button>
-    <button mat-fab color="secondary">
-        <mat-icon class="side-nav-icon" aria-label="icon">upgrade</mat-icon>
-    </button>
+<div *ngIf="isLoggedIn">
+    <app-nav-menu></app-nav-menu>
+    <app-breadcrumb class="breadcrumbs"></app-breadcrumb>
+    <app-upload></app-upload>
 </div>
 
-<!-- <app-upload></app-upload> -->
+
+<div [ngClass]="{
+        'app-container': isLoggedIn,
+        'app-container-full-width': !isLoggedIn
+    }">
+    <router-outlet (refresh-user)="checkLogin($event)"></router-outlet>
+</div>

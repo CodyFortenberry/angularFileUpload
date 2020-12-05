@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UploadService } from '../upload/upload.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BreadcrumbComponent implements OnInit {
 
-  constructor() { }
+  constructor(public uploadService: UploadService) { }
 
   ngOnInit() {
+  }
+
+  get directory() {
+    return this.uploadService.getCurrentDirectory().split(",");
   }
 
 }

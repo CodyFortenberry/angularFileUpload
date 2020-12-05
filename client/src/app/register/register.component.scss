@@ -1,0 +1,28 @@
+.register-container {
+    height:100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-card {
+    width: 300px;
+}
+
+.register-full-width {
+    width:100%;
+}
+
+.register-header-text {
+    margin-left: -16px;
+}
+
+.register-table td {
+    padding: 5px 20px;
+}
+
+.register-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+}

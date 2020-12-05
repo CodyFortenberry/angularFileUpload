@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { UploadService } from '../upload.service';
 import { forkJoin } from 'rxjs';
+import {MAT_DIALOG_DATA} from '@angular/material';
+import { Inject } from '@angular/core';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-dialog',
@@ -11,18 +14,29 @@ import { forkJoin } from 'rxjs';
 export class DialogComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
 
+  
   public files: Set<File> = new Set();
 
-  constructor(public dialogRef: MatDialogRef<DialogComponent>, public uploadService: UploadService) { }
+  constructor(
+    public dialogRef: MatDialogRef<DialogComponent>, 
+    public uploadService: UploadService,
+    public auth: AuthService,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() { }
+    name: string;
+    progress;
+    canBeClosed = true;
+    primaryButtonText = 'Upload';
+    showCancelButton = true;
+    uploading = false;
+    uploadSuccessful = false;
 
-  progress;
-  canBeClosed = true;
-  primaryButtonText = 'Upload';
-  showCancelButton = true;
-  uploading = false;
-  uploadSuccessful = false;
+  ngOnInit() { 
+    if (this.isFolder) {
+      this.primaryButtonText = "Create";
+    }
+  }
+  
 
   onFilesAdded() {
     const files: { [key: string]: File } = this.file.nativeElement.files;
@@ -31,6 +45,10 @@ export class DialogComponent implements OnInit {
         this.files.add(files[key]);
       }
     }
+  }
+
+  get isFolder() {
+    return this.data.itemType === 'folder';
   }
 
   addFiles() {
@@ -47,7 +65,11 @@ export class DialogComponent implements OnInit {
     this.uploading = true;
 
     // start the upload and save the progress map
-    this.progress = this.uploadService.upload(this.files);
+
+    let path = '';
+    let user = this.auth.getCurrentUser();
+
+    this.progress = this.uploadService.upload(this.files,this.name,this.isFolder,path,user.id);
     console.log(this.progress);
     for (const key in this.progress) {
       this.progress[key].progress.subscribe(val => console.log(val));
