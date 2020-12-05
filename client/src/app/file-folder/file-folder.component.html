@@ -2,7 +2,8 @@
   <mat-card *ngFor="let fileFolder of fileFolders;" class="file-folder-card">
     <mat-card-header>
       <mat-card-title>{{fileFolder.name}}</mat-card-title>
-      <mat-card-subtitle>2 Folders, 4 files</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="fileFolder.isFolder">2 Folders, 4 files</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="!fileFolder.isFolder">{{fileFolder.dateAdded}}</mat-card-subtitle>
       <span class="fill-remaining-space"></span>
       <mat-icon *ngIf="fileFolder.isFolder" color="primary" class="file-folder-icon" inline="true" aria-label="icon">folder</mat-icon>
       <mat-icon *ngIf="!fileFolder.isFolder" color="primary" class="file-folder-icon" inline="true" aria-label="icon">article</mat-icon>

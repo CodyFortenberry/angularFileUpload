@@ -7,8 +7,9 @@ export class FileFolder {
     userId: number;
     sharedUserId: number;
     isFolder: boolean;
+    dateAdded: string;
 
-    constructor(id,parentId,name,ext,path,userId,sharedUserId,isFolder) {
+    constructor(id,parentId,name,ext,path,userId,sharedUserId,isFolder,dateAdded) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
@@ -17,5 +18,12 @@ export class FileFolder {
         this.userId = userId
         this.sharedUserId = sharedUserId;
         this.isFolder = isFolder;
+        if (dateAdded) {
+            this.dateAdded = dateAdded;
+        }
+        else {
+            let today = new Date();
+            this.dateAdded = today.toLocaleDateString();
+        }
     }
   }

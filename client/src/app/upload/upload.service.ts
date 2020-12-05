@@ -90,7 +90,7 @@ export class UploadService {
       parentId = parseInt(pathArray[pathArray.length - 1]);
     }
     let sharedUserId = null;
-    let fileFolder = new FileFolder(fileFolderId,parentId,name,fileExt,path,userId,sharedUserId,isFolder);
+    let fileFolder = new FileFolder(fileFolderId,parentId,name,fileExt,path,userId,sharedUserId,isFolder,null);
     fileFolders.push(fileFolder);
 
     localStorage.setItem("fileFolders",JSON.stringify(fileFolders));
@@ -144,7 +144,8 @@ export class UploadService {
               jsonArr[i].path,
               jsonArr[i].userId,
               jsonArr[i].sharedUserId,
-              jsonArr[i].isFolder
+              jsonArr[i].isFolder,
+              jsonArr[i].dateAdded
             );
             fileFolders.push(fileFolder);
         }
