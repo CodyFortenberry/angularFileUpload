@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import {MAT_DIALOG_DATA} from '@angular/material';
 import { Inject } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
+import { FileFolder } from 'src/app/shared/models/fileFolder.model';
 
 @Component({
   selector: 'app-dialog',
@@ -23,17 +24,25 @@ export class DialogComponent implements OnInit {
     public auth: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-    name: string;
-    progress;
-    canBeClosed = true;
-    primaryButtonText = 'Upload';
-    showCancelButton = true;
-    uploading = false;
-    uploadSuccessful = false;
+  name: string;
+  email: string;
+  currentFileFolder: FileFolder;
+  progress;
+  canBeClosed = true;
+  primaryButtonText = 'Upload';
+  showCancelButton = true;
+  uploading = false;
+  uploadSuccessful = false;
 
   ngOnInit() { 
     if (this.isFolder) {
       this.primaryButtonText = "Create";
+    }
+    if (this.isShare) {
+      this.primaryButtonText = "Share"
+      if (this.data.shareFileId !== null) {
+        this.currentFileFolder = this.uploadService.getFileFoldersById(this.data.shareFileId);
+      }
     }
   }
   
@@ -51,11 +60,28 @@ export class DialogComponent implements OnInit {
     return this.data.itemType === 'folder';
   }
 
+  get isFile() {
+    return this.data.itemType === 'file';
+  }
+
+  get isShare() {
+    return this.data.itemType === 'share';
+  }
+
   addFiles() {
     this.file.nativeElement.click();
   }
 
+  share() {
+    let user = this.auth.getUserByEmail(this.email);
+    this.uploadService.shareFileFolder(this.data.shareFileId,user.id);
+    this.dialogRef.close();
+  }
+
   closeDialog() {
+    if (this.isShare) {
+      return this.share()
+    }
     // if everything was uploaded already, just close the dialog
     if (this.uploadSuccessful) {
       return this.dialogRef.close();

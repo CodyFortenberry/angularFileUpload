@@ -12,22 +12,26 @@
     <mat-nav-list class="side-nav-nav">
       <mat-list-item>
         <mat-icon class="side-nav-icon" aria-label="icon">folder</mat-icon>
-        <a mat-list-item href="#">My Files</a>
+        <a mat-list-item [routerLink]="['/home']" (click)="drawer.toggle();">My Files</a>
       </mat-list-item>
       <mat-list-item>
         <mat-icon class="side-nav-icon" aria-label="icon">folder_shared</mat-icon>
-        <a mat-list-item href="#">Files I'm Sharing</a>
+        <a mat-list-item [routerLink]="['/home']" 
+          [queryParams]="{isSharing: true}"
+          (click)="drawer.toggle();">Files I'm Sharing</a>
       </mat-list-item>
       <mat-list-item>
         <mat-icon class="side-nav-icon" aria-label="icon">folder_special</mat-icon>
-        <a mat-list-item href="#">Files Shared With Me</a>
+        <a mat-list-item [routerLink]="['/home']" 
+          [queryParams]="{isSharedWithUser: true}"
+          (click)="drawer.toggle();">Files Shared With Me</a>
       </mat-list-item>
     </mat-nav-list>
     <span class="fill-remaining-space"></span>
     <mat-nav-list class="side-nav-actions">
       <mat-list-item>
         <mat-icon class="side-nav-icon" aria-label="icon">upgrade</mat-icon>
-        <a mat-list-item href="#">Upload File</a>
+        <a mat-list-item (click)="openUploadDialog('file'); drawer.toggle();">Upload File</a>
       </mat-list-item>
       <mat-list-item (click)="logout()" >
         <mat-icon class="side-nav-icon" aria-label="icon">exit_to_app</mat-icon>

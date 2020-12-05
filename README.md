@@ -14,3 +14,9 @@ For the Client
 - npm run serve
 
 Thats it!
+
+
+--------
+Due to lack of time for this chalenge and the need for the evaluatory to get this up and running easily no database was used. 
+Local storage was used in place of a database to demonstrate functionality. 
+If this were an actual application authenication would have been integrated in a way to use JWT tokens and send those tokens with every reuest.

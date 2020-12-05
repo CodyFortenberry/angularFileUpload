@@ -8,8 +8,24 @@ export class AuthService {
     getUserById(id) {
         let usersString = localStorage.getItem('users');
         let users: User[] = this.jsonToUsers(usersString);
-        if (id && users.length > id) {
-            return users[id];
+        if (id) {
+            for (var i=0; i<users.length; i++) {
+                if (users[i].id === id) {
+                    return users[i];
+                }
+            }
+        }
+    }
+
+    getUserByEmail(email) {
+        let usersString = localStorage.getItem('users');
+        let users: User[] = this.jsonToUsers(usersString);
+        if (email) {
+            for (var i=0; i<users.length; i++) {
+                if (users[i].email === email) {
+                    return users[i];
+                }
+            }
         }
     }
 

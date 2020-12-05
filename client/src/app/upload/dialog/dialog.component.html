@@ -1,12 +1,15 @@
 <input type="file" #file style="display: none" (change)="onFilesAdded()" multiple />
 <div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
   <h1 *ngIf="isFolder" mat-dialog-title>Create Folder</h1>
-  <h1 *ngIf="!isFolder" mat-dialog-title>Upload File</h1>
+  <h1 *ngIf="isFile" mat-dialog-title>Create Folder</h1>
+  <h1 *ngIf="isShare" mat-dialog-title>Share {{currentFileFolder.name}}</h1>
   <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="name" name="name">
-    <mat-icon *ngIf="!isFolder" matSuffix color="primary" (click)="addFiles()" class="upload-file-icon" aria-label="icon">upgrade</mat-icon>
-    <mat-hint *ngIf="!isFolder">Click Arrow to browse for file</mat-hint>
+    <mat-label *ngIf="!isShare">Name</mat-label>
+    <mat-label *ngIf="isShare">Email</mat-label>
+    <input *ngIf="!isShare" matInput [(ngModel)]="name" name="name">
+    <input *ngIf="isShare" matInput [(ngModel)]="email" name="email">
+    <mat-icon *ngIf="isFile" matSuffix color="primary" (click)="addFiles()" class="upload-file-icon" aria-label="icon">upgrade</mat-icon>
+    <mat-hint *ngIf="isFile">Click Arrow to browse for file</mat-hint>
   </mat-form-field>
 
   <!-- This are the actions of the dialog, containing the primary and the cancel button-->

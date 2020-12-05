@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FileFolder } from '../shared/models/fileFolder.model';
+import { DialogComponent } from '../upload/dialog/dialog.component';
 import { UploadService } from '../upload/upload.service';
 
 @Component({
@@ -8,22 +11,54 @@ import { UploadService } from '../upload/upload.service';
   templateUrl: './file-folder.component.html',
   styleUrls: ['./file-folder.component.scss']
 })
-export class FileFolderComponent {
+export class FileFolderComponent implements OnInit {
 
-  constructor(public uploadService: UploadService, public auth: AuthService) { }
+  constructor(private uploadService: UploadService, private auth: AuthService, private route: ActivatedRoute, public dialog: MatDialog) { }
+
+  private isSharing: boolean = false;
+  private isSharedWithUser: boolean = false;
+  public fileFolders: FileFolder[] = [];
+  public subscription;
 
   openFolder(id) {
     this.uploadService.setCurrentDirectory(this.uploadService.getCurrentDirectory() + "/" + id);
   }
 
+  public openShareDialog(id) {
+    let dialogRef = this.dialog.open(DialogComponent, { width: '350px', height: '250px',data: {shareFileId: id, itemType: 'share'}});
+  }
+
   downloadFile(id) {
-    console.log("here");
     let file = this.uploadService.getFileFoldersById(id);
     this.uploadService.downloadFile(file.userId,file.id,file.name,file.ext);
   }
 
-  shareFileFolder(id) {
+  ngOnInit() {
+    this.subscription = this.uploadService.fileFolderUpdates().subscribe(msg => {
+      this.setFileFolders();
+    });
+    this.uploadService.setCurrentDirectory("");
+    this.setFileFolders();
+    this.route.queryParams.subscribe(params => {
+      if (params && params.isSharing) {
+        this.isSharing = true;
+      }
+      else {
+        this.isSharing = false;
+      }
 
+      if (params && params.isSharedWithUser) {
+        this.isSharedWithUser = true;
+      }
+      else {
+        this.isSharedWithUser = false;
+      }
+      this.setFileFolders();
+    })
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   deleteFileFolder(id) {
@@ -31,7 +66,8 @@ export class FileFolderComponent {
   }
 
 
-  get fileFolders() {
+
+  setFileFolders() {
     let user = this.auth.getCurrentUser();
     let currentDirectory = this.uploadService.getCurrentDirectory();
     let parentId = null;
@@ -39,8 +75,7 @@ export class FileFolderComponent {
       let directoryArray = currentDirectory.split("/");
       parentId = directoryArray[directoryArray.length - 1];
     }
-    let fileFolders: FileFolder[] = this.uploadService.getFileListForUser(user.id,parentId);
-    return fileFolders;
+    this.fileFolders = this.uploadService.getFileListForUser(user.id,parentId,this.isSharing,this.isSharedWithUser);
   }
 
   get directory() {

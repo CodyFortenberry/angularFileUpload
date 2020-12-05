@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 import {
   HttpClient,
   HttpRequest,
   HttpEventType,
   HttpResponse
 } from '@angular/common/http';
-import { Subject, Observable } from 'rxjs';
 import { FileFolder } from '../shared/models/fileFolder.model';
 import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
 
@@ -14,9 +14,19 @@ const baseUrl = 'http://localhost:3000/';
 @Injectable()
 export class UploadService {
   constructor(private http: HttpClient) { }
+  private updateMessage = new Subject<string>();
 
   public setCurrentDirectory(directory) {
     localStorage.setItem('currentDirectory',directory);
+    this.sendUpdateEvent();
+  }
+
+  public fileFolderUpdates(): Observable<string> {
+    return this.updateMessage.asObservable();
+  }
+
+  public sendUpdateEvent() {
+    this.updateMessage.next("update");
   }
 
   public getCurrentDirectory() {
@@ -25,6 +35,18 @@ export class UploadService {
       return currentDirectory;
     }
     return "";
+  }
+
+  public shareFileFolder(fileId,userId) {
+    let fileFoldersString = localStorage.getItem('fileFolders');
+    let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
+    for (var i=0; i< fileFolders.length; i++) {
+      if (fileFolders[i].id === fileId) {
+        fileFolders[i].sharedUserId = userId;
+      }
+    }
+    localStorage.setItem("fileFolders",JSON.stringify(fileFolders));
+    this.sendUpdateEvent();
   }
 
   getFileFoldersById(id) {
@@ -51,6 +73,7 @@ export class UploadService {
       fileFolders.splice(index,1);
     }
     localStorage.setItem("fileFolders",JSON.stringify(fileFolders));
+    this.sendUpdateEvent();
   }
 
   public addFile(file,name,path,userId,isFolder) {
@@ -58,7 +81,6 @@ export class UploadService {
     let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
     let fileFolderId = this.getLargestId(fileFolders) + 1;
     let fileExt = null;
-    console.log(file);
     if (file) {
       fileExt = this.getFileExt(file.name);
     }
@@ -86,19 +108,24 @@ export class UploadService {
     return largestId;
   }
 
-  getFileListForUser(userId,parentId) {
+  getFileListForUser(userId,parentId,isSharing,isSharedWithUser) {
     let fileFoldersString = localStorage.getItem('fileFolders');
     let fileFolders: FileFolder[] = this.jsonToFileFolders(fileFoldersString);
     var filteredFileFolders = fileFolders.filter(function(event){
+      if (isSharing) {
+        return event.userId == userId && event.parentId == parentId && event.sharedUserId !== null;
+      }
+      if (isSharedWithUser) {
+        return event.sharedUserId == userId && event.parentId == parentId;
+      }
       return event.userId == userId && event.parentId == parentId;
     });
     return filteredFileFolders;
   }
 
+
   getFileExt(fileName) {
-    console.log(fileName);
     if (fileName.indexOf(".") !== -1) {
-      console.log(fileName.split("."));
       return fileName.split(".")[1];
     }
     return null;
@@ -180,7 +207,7 @@ export class UploadService {
       };
     });
     
-
+    this.sendUpdateEvent();
     // return the map of progress.observables
     return status;
   }
@@ -188,12 +215,6 @@ export class UploadService {
   public downloadFile(userId,fileId,name,ext) {
     const url = baseUrl + "download/" + fileId + "?userId=" + userId+ "&name=" + name + "&ext=" + ext;
     window.location.href=url;
-    //this.http.get(url);
-    // this.http.get(url).subscribe((res: any) => { // not callback
-    //   console.log(res)
-    // }, error => {
-    //   console.error("Error", error);
-    // });
   }
 
 

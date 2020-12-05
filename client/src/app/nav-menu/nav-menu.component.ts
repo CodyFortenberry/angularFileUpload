@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { DialogComponent } from '../upload/dialog/dialog.component';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -9,7 +11,7 @@ import { AuthService } from '../auth.service';
 })
 export class NavMenuComponent {
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(private router: Router, private auth: AuthService, public dialog: MatDialog) { }
 
   logout() {
     this.auth.logout();
@@ -18,6 +20,10 @@ export class NavMenuComponent {
 
   get currentUser() {
     return this.auth.getCurrentUser();
+  }
+
+  public openUploadDialog(itemType) {
+    let dialogRef = this.dialog.open(DialogComponent, { width: '350px', height: '250px',data: {itemType: itemType}});
   }
 
 }

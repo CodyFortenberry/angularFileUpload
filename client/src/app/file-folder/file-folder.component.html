@@ -10,7 +10,7 @@
     <mat-card-actions >
       <button class="mat-button mat-primary" *ngIf="fileFolder.isFolder" (click)="openFolder(fileFolder.id)">OPEN</button>
       <button class="mat-button mat-primary" *ngIf="!fileFolder.isFolder" (click)="downloadFile(fileFolder.id)">VIEW</button>
-      <button class="mat-button mat-primary">SHARE</button>
+      <button class="mat-button mat-primary" (click)="openShareDialog(fileFolder.id)">SHARE</button>
       <button class="mat-button mat-primary" (click)="deleteFileFolder(fileFolder.id)">DELETE</button>
     </mat-card-actions>
   </mat-card>
